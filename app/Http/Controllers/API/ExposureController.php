@@ -15,10 +15,10 @@ class ExposureController extends Controller
     {
         $graphicCreatorUrl = env("FRONTEND_URL");
         $url = "{$graphicCreatorUrl}?event={$request->input('text')}&display={$request->input('display')}";
-        // dd($url);
         $puppeteer = new Puppeteer;
         $browser = $puppeteer->launch(["defaultViewport" => ['width' => 1300, 'height' => 512]]);
         $page = $browser->newPage();
+        dd($url);
         $page->goto($url);
         $imageString = $page->screenshot([
             'encoding' => 'base64',
