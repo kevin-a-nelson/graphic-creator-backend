@@ -247,6 +247,14 @@ class ExposureController extends Controller
             if(!property_exists($game->AwayTeam, "TeamId")) {
                 continue;
             }
+
+            if(!property_exists($game->HomeTeam, "PoolName")) {
+                continue;
+            }
+
+            if(!property_exists($game->AwayTeam, "PoolName")) {
+                continue;
+            }
             
             if(!array_key_exists($game->HomeTeam->TeamId, $teamRecords)) {
                 continue;
