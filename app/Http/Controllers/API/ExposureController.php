@@ -82,6 +82,12 @@ class ExposureController extends Controller
         $games = $event->Games->Results;
         $divisionNames = [];
         foreach ($games as $game) {
+            if(!property_exists($game, "Division")) {
+                continue; 
+            }
+            if(!property_exists($game->Division, "Name")) {
+                continue;
+            }
             $pool = $game->Division->Name;
             $divisionNames[$pool] = true;
         }
@@ -174,6 +180,12 @@ class ExposureController extends Controller
         $games = $event->Games->Results;
         $teams = [];
         foreach ($games as $game) {
+            if(!property_exists($game, "HomeTeam")) {
+                continue;
+            }
+            if(!property_exists($game, "AwayTeam")) {
+                continue;
+            }
             if(!property_exists($game->HomeTeam, "TeamId")) {
                 continue;
             }
@@ -210,8 +222,21 @@ class ExposureController extends Controller
         $pools = [];
         $games = $event->Games->Results;
         foreach ($games as $game) {
+            if(!property_exists($game, "Division")) {
+                continue; 
+            }
+            if(!property_exists($game->Division, "Name")) {
+                continue;
+            }
 
             if ($divisionName != $game->Division->Name) {
+                continue;
+            }
+
+            if(!property_exists($game, "HomeTeam")) {
+                continue;
+            }
+            if(!property_exists($game, "AwayTeam")) {
                 continue;
             }
 
@@ -220,6 +245,14 @@ class ExposureController extends Controller
             }
 
             if(!property_exists($game->AwayTeam, "TeamId")) {
+                continue;
+            }
+            
+            if(!array_key_exists($game->HomeTeam->TeamId, $teamRecords)) {
+                continue;
+            }
+
+            if(!array_key_exists($game->AwayTeam->TeamId, $teamRecords)) {
                 continue;
             }
 
@@ -259,7 +292,6 @@ class ExposureController extends Controller
         $divisionNames = $this->getDivisionNames($event);
         $teamRecords = $this->getTeamRecords($event);
         $games = $event->Games->Results;
-        $divisions = [];
         foreach ($divisionNames as $divisionName) {
             $pools = $this->getPools($event, $divisionName, $teamRecords);
             $divisions[$divisionName] = ["Pools" => $pools];
@@ -271,6 +303,9 @@ class ExposureController extends Controller
     public function getEvent($event_id)
     {
         $event = $this->fetchEventFromExposure($event_id);
+        // return [
+        //     $event
+        // ];
         if(!$event->Games) {
            return [
                "ErrorOccured" => true,
