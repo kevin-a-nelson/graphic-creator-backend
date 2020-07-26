@@ -9,6 +9,9 @@ use Nesk\Puphpeteer\Puppeteer;
 class ExposureController extends Controller
 {
 
+    public function test(Request $request) {
+        return "Test";
+    }
     public function screenShot(Request $request)
     {
         // $graphicCreatorUrl = "http://prepnetworkbrackets.surge.sh/";
